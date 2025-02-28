@@ -19,6 +19,9 @@ model User {
   receivedMessages  Message[]    @relation("ReceivedMessages")
   notifications     Notification[] @relation("UserNotifications")
   auditLogs         AuditLog[]   @relation("UserAuditLogs")
+
+  user1Chats        Chat[]       @relation("User1Chats")
+  user2Chats        Chat[]       @relation("User2Chats")
 }
 
 model LostID {
@@ -26,6 +29,8 @@ model LostID {
   userId      Int
   name        String
   admissionNo String
+  image       Bytes
+  description String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
 }
@@ -36,6 +41,8 @@ model FoundID {
   name        String
   admissionNo String
   location    String
+  image       Bytes
+  description String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
 }
@@ -57,6 +64,20 @@ model Message {
 
   sender     User @relation("SentMessages", fields: [senderId], references: [id])
   receiver   User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  chat       Chat?  @relation("ChatMessages", fields: [chatId], references: [id])
+  chatId     Int?
+}
+
+model Chat {
+  id         Int      @id @default(autoincrement())
+  user1Id    Int
+  user2Id    Int
+  createdAt  DateTime @default(now())
+  messages   Message[] @relation("ChatMessages")
+
+  user1      User @relation("User1Chats", fields: [user1Id], references: [id])
+  user2      User @relation("User2Chats", fields: [user2Id], references: [id])
 }
 
 model AuditLog {
