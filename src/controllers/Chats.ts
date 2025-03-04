@@ -135,3 +135,109 @@ export async function chatHistory(
      return;
   }
 }
+
+// Fetch messages received by a user
+export async function receivedMessages(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  if (req.method !== "GET") {
+    res.status(405).json({ error: "Method not allowed" });
+    return;
+  }
+
+  const { userId } = req.query;
+
+  if (!userId) {
+    res.status(400).json({ error: "User ID is required" });
+    return;
+  }
+
+  try {
+    const messages = await prisma.message.findMany({
+      where: { receiverId: Number(userId) },
+      orderBy: { sentAt: "desc" },
+      include: {
+        sender: { select: { id: true, name: true } },
+      },
+    });
+
+    res.status(200).json(messages);
+    return;
+  } catch (error) {
+    console.error("Error fetching received messages:", error);
+    res.status(500).json({ error: "Failed to fetch messages" });
+    return;
+  }
+}
+
+// Get messages for a single user
+export async function getUserMessages(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  if (req.method !== "GET") {
+    res.status(405).json({ error: "Method not allowed" });
+    return;
+  }
+
+  const { userId } = req.query;
+
+  if (!userId) {
+    res.status(400).json({ error: "User ID is required" });
+    return;
+  }
+
+  try {
+    const messages = await prisma.message.findMany({
+      where: {
+        OR: [
+          { senderId: Number(userId) },
+          { receiverId: Number(userId) },
+        ],
+      },
+      orderBy: { sentAt: "desc" },
+    });
+
+    res.status(200).json(messages);
+    return;
+  } catch (error) {
+    console.error("Error fetching user messages:", error);
+    res.status(500).json({ error: "Failed to fetch messages" });
+    return;
+  }
+}
+
+// Get notifications for a user
+export async function getNotifications(req: express.Request,
+  res: express.Response,
+  next: express.NextFunction) {
+  if (req.method !== "GET") {
+    res.status(405).json({ error: "Method not allowed" });
+    return;
+  }
+
+  const { userId } = req.query;
+
+  if (!userId) {
+    res.status(400).json({ error: "User ID is required" });
+    return;
+  }
+
+  try {
+    const notifications = await prisma.notification.findMany({
+      where: { userId: Number(userId) },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.status(200).json(notifications);
+    return;
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ error: "Failed to fetch notifications" });
+    return;
+  }
+}
+
