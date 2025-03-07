@@ -1,6 +1,11 @@
 import express from "express";
 import { getAllUsers, getSingleUser, Login, postUser } from "../controllers/User";
 import { chatHistory, createChat, sendMessage,receivedMessages,getUserMessages, getNotifications } from "../controllers/Chats";
+import upload from "../utils/upload";
+import { deleteLostID, getAllLostIDs, getLostID, postLostID, updateLostID } from "../controllers/ReportLostId";
+import { deleteFoundID, getAllFoundIDs, getFoundID, postFoundID, updateFoundID } from "../controllers/ReportFoundIds";
+import { deleteReportedFoundIDs, getAllReportedFoundIDs } from "../controllers/ReportedFoundIds";
+import { deleteReportedLostIDs, getAllReportedLostIDs } from "../controllers/ReportedLostIds";
 
 const routes = express.Router();
 //users
@@ -16,4 +21,29 @@ routes.get("/chathistory", chatHistory)
 routes.get("/newmessages", receivedMessages)
 routes.get("/notification", getNotifications)
 routes.get("/usermessages", getUserMessages)
+
+//lostid
+routes.post('/lostID', upload.single('image'), postLostID);
+routes.patch('/lostID/:id', upload.single('image'), updateLostID);
+routes.get('/:id/lostID', getLostID);
+routes.get('/lostIDs', getAllLostIDs);
+routes.delete('/lostID/:id', deleteLostID);
+
+//foundid
+routes.post('/foundID', upload.single('image'), postFoundID);
+routes.patch('/foundID/:id', upload.single('image'), updateFoundID);
+routes.get('/:id/foundID', getFoundID);
+routes.get('/foundIDs', getAllFoundIDs);
+routes.delete('/foundID/:id', deleteFoundID);
+
+//reportedfoundID
+routes.get('/foundIDs', getAllReportedFoundIDs);
+routes.delete('/foundID/:id', deleteReportedFoundIDs);
+
+//reportedLostID
+routes.get('/lostIDs', getAllReportedLostIDs);
+routes.delete('/lostID/:id', deleteReportedLostIDs);
+
+
+
 export default routes;

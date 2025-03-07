@@ -29,7 +29,7 @@ model LostID {
   userId      Int
   name        String
   admissionNo String
-  image       Bytes
+  image       String  // Store only the filename with extension
   description String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
@@ -41,7 +41,7 @@ model FoundID {
   name        String
   admissionNo String
   location    String
-  image       Bytes
+  image       String  // Store only the filename with extension
   description String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
