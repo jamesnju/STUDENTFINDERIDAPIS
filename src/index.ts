@@ -14,7 +14,7 @@ const PORT = 8000;
 
 dotenv.config()
 app.use(cors());  // Enable CORS for all routes
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/tmp', express.static(path.join(__dirname, 'tmp')));
 
 //logger middleware
 app.use(logger);
