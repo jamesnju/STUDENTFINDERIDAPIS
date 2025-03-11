@@ -15,9 +15,9 @@ routes.get("/:id/user", getSingleUser)
 routes.post("/login", Login)
 
 //chats
-routes.post("/create", createChat)
-routes.post("/sendmessage", sendMessage)
-routes.get("/chathistory", chatHistory)
+routes.post("/create", createChat);
+routes.post("/sendmessage", sendMessage);
+routes.get("/chathistory", chatHistory);
 routes.get("/newmessages", receivedMessages)
 routes.get("/notification", getNotifications)
 routes.get("/usermessages", getUserMessages)

@@ -199,6 +199,13 @@ export async function getUserMessages(
         ],
       },
       orderBy: { sentAt: "desc" },
+      include: {
+        sender: {
+          select: {
+            name: true, // Assuming the user table has a 'name' field
+          },
+        },
+      },
     });
 
     res.status(200).json(messages);
