@@ -1,18 +1,27 @@
 import express from "express";
-import { getAllUsers, getSingleUser, Login, postUser } from "../controllers/User";
+import { deleteUser, getAllUsers, getSingleUser, Login, postUser, updateUser } from "../controllers/User";
 import { chatHistory, createChat, sendMessage,receivedMessages,getUserMessages, getNotifications } from "../controllers/Chats";
 import upload from "../utils/upload";
 import { deleteLostID, getAllLostIDs, getLostID, postLostID, updateLostID } from "../controllers/ReportLostId";
 import { deleteFoundID, getAllFoundIDs, getFoundID, postFoundID, updateFoundID } from "../controllers/ReportFoundIds";
 import { deleteReportedFoundIDs, getAllReportedFoundIDs } from "../controllers/ReportedFoundIds";
 import { deleteReportedLostIDs, getAllReportedLostIDs } from "../controllers/ReportedLostIds";
+import { getAllPayments, mpesaWebhook, payMpesa } from "../controllers/payments";
 
 const routes = express.Router();
 //users
 routes.post("/register", postUser)
 routes.get("/users", getAllUsers)
 routes.get("/:id/user", getSingleUser)
-routes.post("/login", Login)
+routes.post("/login", Login);
+routes.patch("/:id/user", updateUser);
+routes.delete("/:id/user", deleteUser);
+
+//payements
+routes.get("/payments", getAllPayments)
+routes.post("/mpesa", payMpesa);
+// routes.post("/webhook", mpesaWebhook);
+
 
 //chats
 routes.post("/create", createChat);

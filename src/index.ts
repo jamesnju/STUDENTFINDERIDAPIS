@@ -5,6 +5,7 @@ import errorHandler from "./middleware/error";
 import dotenv from "dotenv"
 import cors from 'cors';
 import path from 'path';  // Add this import for path
+import { mpesaWebhook } from "./controllers/payments";
 
 
 
@@ -14,13 +15,15 @@ const PORT = 8000;
 
 dotenv.config()
 app.use(cors());  // Enable CORS for all routes
-app.use('/tmp', express.static(path.join(__dirname, 'tmp')));
+// body parser to allow submit json data
+app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //logger middleware
 app.use(logger);
 
-// body parser to allow submit json data
-app.use(express.json());
+app.post('/api/v1/mpesaWebhook', mpesaWebhook);
+
 
 //routes
 app.use("/api/v1", routes);

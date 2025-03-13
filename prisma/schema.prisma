@@ -19,9 +19,9 @@ model User {
   receivedMessages  Message[]    @relation("ReceivedMessages")
   notifications     Notification[] @relation("UserNotifications")
   auditLogs         AuditLog[]   @relation("UserAuditLogs")
-
   user1Chats        Chat[]       @relation("User1Chats")
   user2Chats        Chat[]       @relation("User2Chats")
+  payments          Payment[]    @relation("UserPayments")
 }
 
 model LostID {
@@ -29,8 +29,8 @@ model LostID {
   userId      Int
   name        String
   admissionNo String
-  image       String  // Store only the filename with extension
-  description String?
+  image       String
+  status      String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
 }
@@ -41,8 +41,8 @@ model FoundID {
   name        String
   admissionNo String
   location    String
-  image       String  // Store only the filename with extension
-  description String?
+  image       String
+  status      String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
 }
@@ -61,10 +61,8 @@ model Message {
   receiverId Int
   text       String
   sentAt     DateTime @default(now())
-
   sender     User @relation("SentMessages", fields: [senderId], references: [id])
   receiver   User @relation("ReceivedMessages", fields: [receiverId], references: [id])
-
   chat       Chat?  @relation("ChatMessages", fields: [chatId], references: [id])
   chatId     Int?
 }
@@ -75,7 +73,6 @@ model Chat {
   user2Id    Int
   createdAt  DateTime @default(now())
   messages   Message[] @relation("ChatMessages")
-
   user1      User @relation("User1Chats", fields: [user1Id], references: [id])
   user2      User @relation("User2Chats", fields: [user2Id], references: [id])
 }
@@ -86,6 +83,21 @@ model AuditLog {
   userId    Int
   timestamp DateTime @default(now())
   user      User     @relation("UserAuditLogs", fields: [userId], references: [id])
+}
+
+model Payment {
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  amount           Float
+  paymentMethod    String   @default("MPESA")
+  paymentStatus    String   @default("pending")
+  paymentDate      DateTime
+  createdAt        DateTime @default(now())
+  transactionId    String?
+  merchantRequestId String?
+  mpesaReceipt     String?
+  failureReason  String? // Optional field for failure reasons
+  user             User     @relation("UserPayments", fields: [userId], references: [id])
 }
 
 enum Role {

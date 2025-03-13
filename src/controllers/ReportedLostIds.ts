@@ -13,7 +13,7 @@ export const getAllReportedLostIDs = async (req: Request, res: Response) => {
     // Map over each FoundID and add the full image path
     const foundIDsWithImagePaths = foundIDs.map((foundID) => ({
       ...foundID,
-      image: foundID.image ? `tmp/${foundID.image}` : null, // Include image path (full URL)
+      image: foundID.image ? `uploads/${foundID.image}` : null, // Include image path (full URL)
     }));
 
     // Return all FoundID records with the full image path
@@ -23,7 +23,7 @@ export const getAllReportedLostIDs = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to fetch FoundIDs' });
   }
 };//ReportedLostIDs
-
+///var/task/src/uploads
 // Delete FoundID by ID
 export const deleteReportedLostIDs = async (req: Request, res: Response) => {
     const { id } = req.params;

@@ -5,10 +5,10 @@ import fs from 'fs';
 
 
 
-// Configure multer to store images in 'tmp' folder and retain the file extension
+// Configure multer to store images in 'uploads' folder and retain the file extension
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, '../tmp');
+    const uploadDir = path.join(__dirname, '../uploads');
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
