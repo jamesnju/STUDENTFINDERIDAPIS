@@ -53,7 +53,7 @@ export async function postUser(
 ) {
   try {
     const { name, password, email } = req.body;
-    //console.log(req.body)
+    console.log(req.body)
 
     if (!name || !email || !password) {
       const error = new Error("Fill all fields");
@@ -153,8 +153,9 @@ export async function updateUser(
   res: express.Response,
   next: express.NextFunction
 ) {
+  const { name, email, role } = req.body;
   const id = parseInt(req.params.id);
-  const { name, email, password, role } = req.body;
+  console.log(req.body,name, email, role ,id,"-------------------------------------------user-------------------------------");
   try {
     // Find the user by ID
     const user = await prisma.user.findUnique({
@@ -167,15 +168,16 @@ export async function updateUser(
       res.status(400).json(`user id ${id} doesn't exist`);
       return next(error);
     }
-
+ // Convert role to uppercase to match the Prisma enum
+ const normalizedRole = role ? role.toUpperCase() : user.role
     // Update the user data
     const updatedUser = await prisma.user.update({
       where: { id: id },
       data: {
         name: name || user.name, // Only update the fields that are provided
         email: email || user.email,
-        password: password || user.password,
-        role: role || user.role,
+        //password: password || user.password,
+        role: normalizedRole || user.role,
       },
     });
 
