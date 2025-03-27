@@ -52,10 +52,10 @@ export async function postUser(
   next: express.NextFunction
 ) {
   try {
-    const { name, password, email } = req.body;
+    const { name, password, email, reason } = req.body;
     console.log(req.body)
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !reason) {
       const error = new Error("Fill all fields");
       return next(error);
     }
@@ -75,6 +75,7 @@ export async function postUser(
       data: {
         name,
         email,
+        reason,
         password: hashpassword,
       },
     });

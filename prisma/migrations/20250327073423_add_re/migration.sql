@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "FoundID" ALTER COLUMN "image" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "LostID" ALTER COLUMN "image" DROP NOT NULL;

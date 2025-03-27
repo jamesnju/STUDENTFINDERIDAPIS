@@ -13,6 +13,7 @@ model User {
   email             String       @unique
   password          String
   role              Role         @default(STUDENT)
+  reason            String?
   lostIDs           LostID[]
   foundIDs          FoundID[]
   sentMessages      Message[]    @relation("SentMessages")
@@ -29,7 +30,7 @@ model LostID {
   userId      Int
   name        String
   admissionNo String
-  image       String
+  image       String?
   status      String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
@@ -41,7 +42,7 @@ model FoundID {
   name        String
   admissionNo String
   location    String
-  image       String
+  image       String?
   status      String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
