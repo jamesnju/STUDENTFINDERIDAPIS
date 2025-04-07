@@ -7,6 +7,7 @@ import { deleteFoundID, getAllFoundIDs, getFoundID, postFoundID, updateFoundID }
 import { deleteReportedFoundIDs, getAllReportedFoundIDs } from "../controllers/ReportedFoundIds";
 import { deleteReportedLostIDs, getAllReportedLostIDs } from "../controllers/ReportedLostIds";
 import { getAllPayments, mpesaWebhook, payMpesa } from "../controllers/payments";
+import { sendEmailNotification } from "../controllers/notifications";
 
 const routes = express.Router();
 //users
@@ -53,6 +54,8 @@ routes.delete('/foundID/:id', deleteReportedFoundIDs);
 routes.get('/lostIDs', getAllReportedLostIDs);
 routes.delete('/lostID/:id', deleteReportedLostIDs);
 
+//notification
+routes.post("/notifications", sendEmailNotification);
 
 
 export default routes;

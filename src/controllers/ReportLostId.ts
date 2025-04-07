@@ -5,12 +5,12 @@ import path from 'path';
 import { prisma } from '../conn/connection';
 
 export const postLostID = async (req: Request, res: Response) => {
-  const { name, admissionNo, status } = req.body;
+  const { name, admissionNo, status, email } = req.body;
   const userId = parseInt(req.body.userId, 10);
 
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null; // Use the file path stored in the uploads folder
 
-  if (isNaN(userId) || !name || !admissionNo) {
+  if (isNaN(userId) || !name || !admissionNo || !email) {
     res.status(400).json({ error: 'User ID, name, and admission number are required' });
     return;
   }
@@ -31,6 +31,7 @@ export const postLostID = async (req: Request, res: Response) => {
         admissionNo,
         image: req.file ? req.file.filename : "/img/idc.png", // Store the filename or null if no file uploaded
         status,
+        email,
       },
     });
 
@@ -45,7 +46,7 @@ export const postLostID = async (req: Request, res: Response) => {
 // Update LostID by ID
 export const updateLostID = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, admissionNo, status } = req.body;
+    const { name, admissionNo, status,email } = req.body;
     console.log(name, admissionNo, status, "the submitted");
     const imagePath = req.file ? `/uploads/${req.file.filename}` : null; // Image path to store in DB
   
@@ -67,6 +68,7 @@ export const updateLostID = async (req: Request, res: Response) => {
           name: name || lostID.name, // Only update if the field is provided
           admissionNo: admissionNo || lostID.admissionNo, // Only update if the field is provided
           status: status || lostID.status, // Only update if the field is provided
+          email: email || lostID.email, // Only update if the field is provided
           image: updatedImage, // Update image with the new filename or keep the old one
         },
       });

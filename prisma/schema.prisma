@@ -32,8 +32,10 @@ model LostID {
   admissionNo String
   image       String?
   status      String?
+  email       String?
   reportedAt  DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
+  
 }
 
 model FoundID {
@@ -104,4 +106,12 @@ model Payment {
 enum Role {
   STUDENT
   ADMIN
+}
+model Email {
+  id        Int      @id @default(autoincrement())
+  to        String
+  subject   String
+  text      String
+  from      String
+  createdAt DateTime @default(now())
 }
